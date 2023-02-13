@@ -100,7 +100,7 @@ const Category = ({ params }: { params: { slug: string } }) => {
   };
 
   return (
-    <div className="">
+    <div className="mt-32">
       <header>
         <h1 className="">
           {searchParams === "rent" ? "Places for rent" : "Places for sale"}

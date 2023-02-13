@@ -56,7 +56,7 @@ const Listing = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <main>
+    <main className="mt-32">
       {/* <Helmet>
         <title>{name}</title>
       </Helmet> */}

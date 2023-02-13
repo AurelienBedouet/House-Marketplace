@@ -131,7 +131,7 @@ const Profile = () => {
 
   if (user) {
     return (
-      <div>
+      <div className="mt-32">
         <header>
           <h1 className="text-3xl font-bold">My Profile</h1>
           <button onClick={logout} className="py-3 px-5 rounded-lg shadow-lg">

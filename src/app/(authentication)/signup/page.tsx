@@ -65,73 +65,75 @@ const SignUp = () => {
 
       toast.success("Account created with success!");
 
-      router.push("/");
+      router.push("/profile");
     } catch (error) {
       toast.error("Something went wrong with registration");
     }
   };
 
   return (
-    <div className="w-full">
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          id="name"
-          placeholder="Name"
-          value={name}
-          onChange={onChange}
-          className="rounded-lg shadow-md border-gray-200"
-        />
-
-        <input
-          type="email"
-          id="email"
-          placeholder="Email"
-          value={email}
-          onChange={onChange}
-          className="rounded-lg shadow-md border-gray-200"
-        />
-
-        <div className="relative">
-          {showPassword ? (
-            <AiFillLock
-              size={20}
-              color={"#2c2c2c"}
-              onClick={() => setShowPassword(prevState => !prevState)}
-              className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
-            />
-          ) : (
-            <MdOutlineVisibility
-              size={20}
-              color={"#2c2c2c"}
-              onClick={() => setShowPassword(prevState => !prevState)}
-              className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
-            />
-          )}
+    <div className="flex items-center h-[calc(100vh-60px)] mx-auto w-full px-4 max-w-md">
+      <div className="w-full">
+        <form onSubmit={onSubmit} className="flex flex-col gap-4">
+          <input
+            type="text"
+            id="name"
+            placeholder="Name"
+            value={name}
+            onChange={onChange}
+            className="rounded-lg shadow-md border-gray-200"
+          />
 
           <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            placeholder="Password"
-            value={password}
+            type="email"
+            id="email"
+            placeholder="Email"
+            value={email}
             onChange={onChange}
-            className="w-full pr-12 rounded-lg shadow-md border-gray-200"
+            className="rounded-lg shadow-md border-gray-200"
           />
-        </div>
 
-        <button type="submit" className="mb-4 py-3 px-5 rounded-lg shadow-lg">
-          Sign Up
-        </button>
-      </form>
+          <div className="relative">
+            {showPassword ? (
+              <AiFillLock
+                size={20}
+                color={"#2c2c2c"}
+                onClick={() => setShowPassword(prevState => !prevState)}
+                className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
+              />
+            ) : (
+              <MdOutlineVisibility
+                size={20}
+                color={"#2c2c2c"}
+                onClick={() => setShowPassword(prevState => !prevState)}
+                className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
+              />
+            )}
 
-      <GoogleAuth />
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              placeholder="Password"
+              value={password}
+              onChange={onChange}
+              className="w-full pr-12 rounded-lg shadow-md border-gray-200"
+            />
+          </div>
 
-      <p>
-        Already have an account ?{" "}
-        <Link href="/signin" className="underline">
-          Sign In
-        </Link>
-      </p>
+          <button type="submit" className="mb-4 py-3 px-5 rounded-lg shadow-lg">
+            Sign Up
+          </button>
+        </form>
+
+        <GoogleAuth />
+
+        <p>
+          Already have an account ?{" "}
+          <Link href="/signin" className="underline">
+            Sign In
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,10 @@
-import Navbar from "@/components/shared/Navbar";
+"use client";
+
+import Navbar from "@/components/global/Navbar";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Footer from "@/components/global/Footer";
 
 export default function RootLayout({
   children,
@@ -14,10 +19,15 @@ export default function RootLayout({
       */}
       <head />
       <body className="bg-slate-100 ">
-        <div className="mx-auto w-full px-4 max-w-7xl mt-12 mb-36">
-          {children}
-        </div>
+        <ToastContainer
+          limit={1}
+          position="top-center"
+          autoClose={1500}
+          pauseOnHover
+        />
         <Navbar />
+        <div className="mx-auto w-full px-4 max-w-7xl">{children}</div>
+        <Footer />
       </body>
     </html>
   );

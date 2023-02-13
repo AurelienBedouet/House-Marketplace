@@ -198,7 +198,7 @@ const CreateListing = () => {
   }
 
   return (
-    <>
+    <div className="mt-32">
       <header>
         <h1 className="text-3xl font-bold mb-8">Create a Listing</h1>
       </header>
@@ -448,7 +448,7 @@ const CreateListing = () => {
           </button>
         </form>
       </main>
-    </>
+    </div>
   );
 };
 

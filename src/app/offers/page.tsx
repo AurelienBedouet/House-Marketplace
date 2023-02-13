@@ -103,7 +103,7 @@ const Offers = () => {
   };
 
   return (
-    <div className="">
+    <div className="mt-32">
       <header>
         <h1 className="">Offers</h1>
       </header>

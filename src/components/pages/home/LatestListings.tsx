@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { IListingData, IListingObject } from "@/types";
 import { db } from "@/utils/firebase.config";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import Loader from "./shared/Loader";
+import Loader from "../../shared/Loader";
 import "react-slideshow-image/dist/styles.css";
 import { Slide } from "react-slideshow-image";
 import { useRouter } from "next/navigation";
 
 type Props = {};
 
-const HomeSlider = (props: Props) => {
+const LatestListings = (props: Props) => {
   const [loading, setLoading] = useState(true);
   const [listings, setListings] = useState<IListingObject[]>([]);
 
@@ -49,8 +49,6 @@ const HomeSlider = (props: Props) => {
 
   return listings ? (
     <>
-      <h2 className="text-2xl font-semibold">Recommended</h2>
-
       <div className="slide-container mt-4">
         <Slide indicators={true} pauseOnHover={true}>
           {listings.map(({ data, id }) => (
@@ -60,7 +58,7 @@ const HomeSlider = (props: Props) => {
               className="cursor-pointer relative"
             >
               <div
-                className="bg-cover h-[240px] sm:h-[300px] md:h-[360px] lg:h-[420px]"
+                className="bg-cover h-[240px] sm:h-[300px] md:h-[360px] lg:h-[420px] rounded-xl"
                 style={{
                   background: `url(${data.imgUrls[0]}) center no-repeat`,
                 }}
@@ -82,4 +80,4 @@ const HomeSlider = (props: Props) => {
   );
 };
 
-export default HomeSlider;
+export default LatestListings;

@@ -30,7 +30,7 @@ const Contact = ({ params }: { params: { id: string } }) => {
   }, [params.id]);
 
   return (
-    <div className="pageContainer">
+    <div className="pageContainer mt-32">
       <header>
         <p className="pageHeader">Contact Landlord</p>
       </header>

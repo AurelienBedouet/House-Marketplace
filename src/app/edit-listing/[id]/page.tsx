@@ -233,7 +233,7 @@ const EditListing = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <>
+    <div className="mt-32">
       <header>
         <h1 className="text-3xl font-bold mb-8">Edit Listing</h1>
       </header>
@@ -483,7 +483,7 @@ const EditListing = ({ params }: { params: { id: string } }) => {
           </button>
         </form>
       </main>
-    </>
+    </div>
   );
 };
 

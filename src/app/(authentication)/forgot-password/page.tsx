@@ -27,27 +27,31 @@ const ForgotPassword = (props: Props) => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-133px)]">
-      <form
-        onSubmit={onSubmit}
-        className="w-full flex flex-col gap-4 max-w-md m-auto"
-      >
-        <h1 className="text-3xl text-center font-bold mb-6">Forgot Password</h1>
-        <input
-          type="email"
-          id="email"
-          placeholder="Email"
-          value={email}
-          onChange={onChange}
-          className="rounded-lg shadow-md border-gray-200"
-        />
-        <button type="submit" className="mb-4 py-3 px-5 rounded-lg shadow-lg">
-          Send Reset Link
-        </button>
-        <Link href="/signin" className="underline">
-          Sign in
-        </Link>
-      </form>
+    <div className="flex items-center h-[calc(100vh-60px)] mx-auto w-full px-4 max-w-md">
+      <div className="w-full">
+        <form
+          onSubmit={onSubmit}
+          className="w-full flex flex-col gap-4 max-w-md m-auto"
+        >
+          <h1 className="text-3xl text-center font-bold mb-6">
+            Forgot Password
+          </h1>
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+            value={email}
+            onChange={onChange}
+            className="rounded-lg shadow-md border-gray-200"
+          />
+          <button type="submit" className="mb-4 py-3 px-5 rounded-lg shadow-lg">
+            Send Reset Link
+          </button>
+          <Link href="/signin" className="underline">
+            Sign in
+          </Link>
+        </form>
+      </div>
     </div>
   );
 };

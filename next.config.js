@@ -3,6 +3,14 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-}
 
-module.exports = nextConfig
+  images: {
+    remotePatterns: [
+      {hostname: 'source.unsplash.com'},
+      {hostname: 'images.unsplash.com'},
+      {hostname: 'firebasestorage.googleapis.com'},
+    ],
+  },
+};
+
+module.exports = nextConfig;

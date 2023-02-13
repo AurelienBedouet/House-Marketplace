@@ -1,5 +1,8 @@
+"use client";
+
 import Navbar from "@/components/shared/Navbar";
-import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RootLayout({
   children,
@@ -14,9 +17,15 @@ export default function RootLayout({
       */}
       <head />
       <body className="bg-slate-100 ">
-        <div className="mx-auto w-full px-4 max-w-7xl mt-12 mb-36">
+        <ToastContainer
+          limit={1}
+          position="top-center"
+          autoClose={1500}
+          pauseOnHover
+        />
+        <main className="flex items-center h-[calc(100vh-133px)] mx-auto w-full px-4 max-w-md">
           {children}
-        </div>
+        </main>
         <Navbar />
       </body>
     </html>

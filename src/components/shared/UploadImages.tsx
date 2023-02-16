@@ -12,13 +12,15 @@ const baseStyle = {
   flex: 1,
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   padding: "20px",
+  minHeight: "200px",
   borderWidth: 2,
   borderRadius: 2,
   borderColor: "#eeeeee",
   borderStyle: "dashed",
   backgroundColor: "#fafafa",
-  color: "#bdbdbd",
+  color: "rgb(156 163 175)",
   outline: "none",
   transition: "border .24s ease-in-out",
 };
@@ -91,11 +93,7 @@ const UploadImages = ({ setFormData }: Props) => {
   return (
     <div>
       <label className="text-xl font-semibold">Upload more images</label>
-      <div
-        {...getRootProps({ style })}
-        className="flex-col my-4"
-        // className={`my-4 flex-1 flex flex-col items-center p-5 border-2 rounded-sm focus:border-blue-500 border-slate-300 border-dashed bg-neutral-50 text-neutral-400 outline-none transition duration-[.24s] ease-in-out`}
-      >
+      <div {...getRootProps({ style })} className="flex-col my-4">
         <input {...getInputProps()} />
         <p>Drag and drop your images here, or click to select them</p>
         <em>

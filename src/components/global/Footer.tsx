@@ -1,10 +1,29 @@
+import Link from "next/link";
 import { AiFillGithub } from "react-icons/ai";
 
 const Footer = () => {
   const footerYear = new Date().getFullYear();
   return (
-    <footer className="bg-white w-full z-10 py-6 mt-12">
-      <div className="mx-auto w-full px-4 max-w-7xl flex flex-col sm:flex-row items-center justify-center gap-4">
+    <footer className="w-full h-[120px] flex flex-col">
+      <ul className="h-[60px] flex justify-center items-center gap-4 border-b bg-gray-300 text-gray-700 font-semibold">
+        <li>
+          <Link href="/category/rent" className="hover:underline">
+            For Rent
+          </Link>
+        </li>
+        <li>
+          <Link href="/category/sale" className="hover:underline">
+            For Sale
+          </Link>
+        </li>
+        <li>
+          <Link href="/offers" className="hover:underline">
+            Offers
+          </Link>
+        </li>
+      </ul>
+
+      <div className="h-[60px] bg-white w-full flex flex-col sm:flex-row items-center justify-center gap-4">
         <p className="text-sm font-light">
           {" "}
           Copyright &copy;{footerYear} All rights reserved
@@ -14,7 +33,7 @@ const Footer = () => {
           href="https://github.com/AurelienBedouet/property-portal"
           target="_blank"
           rel="noreferrer"
-          className="font-semibold flex items-center gap-2 border px-4 py-1 rounded-lg transition duration-400 hover:bg-gray-200"
+          className="hidden sm:flex font-semibold items-center gap-2 border px-4 py-1 rounded-lg transition duration-400 hover:bg-gray-200"
         >
           <AiFillGithub /> Code
         </a>

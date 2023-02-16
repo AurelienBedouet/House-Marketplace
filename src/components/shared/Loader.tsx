@@ -1,5 +1,5 @@
 const Loader = () => (
-  <div className="h-[calc(100vh-133px)] flex justify-center items-center">
+  <div className="absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.3)]">
     <div role="status">
       <svg
         aria-hidden="true"

@@ -1,26 +1,24 @@
 "use client";
 
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
 import { IListingData } from "@/types";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "@/utils/firebase.config";
+import { auth, db } from "@/lib/firebase/firebase.config";
 import { toast } from "react-toastify";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
 import Loader from "@/components/shared/Loader";
-import UploadImages from "../../components/UploadImages";
-import UploadFeaturedImage from "../../components/UploadFeaturedImage";
+import UploadImages from "../../components/shared/UploadImages";
+import UploadFeaturedImage from "../../components/shared/UploadFeaturedImage";
+import InputField from "@/components/layout/InputField";
+import Button from "@/components/layout/Button";
+import { uploadImage } from "@/lib/helpers/images";
+import { onAuthStateChanged } from "firebase/auth";
+import { fetchGeolocationData } from "@/lib/fetchData/fetchGeolocationData";
 
 const CreateListing = () => {
   const [geolocationEnabled, setGeolocationEnabled] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [formData, setFormData] = useState<IListingData>({
     type: "rent",
     name: "",
@@ -31,9 +29,10 @@ const CreateListing = () => {
     parking: false,
     furnished: false,
     address: "",
+    location: "",
     offer: false,
-    regularPrice: 0,
-    discountedPrice: 0,
+    regularPrice: 50,
+    discountedPrice: 49,
     images: [],
     geolocation: {
       lat: 0,
@@ -41,6 +40,7 @@ const CreateListing = () => {
     },
     userRef: "",
     imgUrls: [],
+    id: "",
   });
 
   const {
@@ -61,91 +61,62 @@ const CreateListing = () => {
 
   const [user] = useAuthState(auth);
   const router = useRouter();
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    if (user) {
-      setFormData({ ...formData, userRef: user.uid });
-    } else {
-      router.push("/signin");
+    if (isMounted) {
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          setFormData({ ...formData, userRef: user.uid });
+        } else {
+          router.push("/signin");
+        }
+      });
     }
+
+    return () => {
+      isMounted.current = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isMounted]);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setLoading(true);
+    setLoadingData(true);
 
-    if (discountedPrice && discountedPrice >= regularPrice) {
-      setLoading(false);
+    if (discountedPrice && +discountedPrice >= +regularPrice) {
+      setLoadingData(false);
       toast.error("Discounted price needs to be less than regular price");
       return;
     }
 
     if (images && images.length > 6) {
-      setLoading(false);
+      setLoadingData(false);
       toast.error("Max 6 images");
       return;
     }
 
-    // let googleAddress: string;
-    // let googleGeolocation = {
-    //   lat: 0,
-    //   lng: 0,
-    // };
+    // Get Geolocation Data
+    let geolocationData;
+    if (geolocationEnabled) {
+      geolocationData = await fetchGeolocationData(address);
+    }
 
-    // if (geolocationEnabled) {
-    //   const response = await fetch(
-    //     `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
-    //   );
-
-    //   const data = await response.json();
-
-    //   googleGeolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
-    //   googleGeolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
-
-    //   googleAddress =
-    //     data.status === "ZERO_RESULTS"
-    //       ? undefined
-    //       : data.results[0]?.formatted_address;
-
-    //   if (googleAddress === undefined || googleAddress.includes("undefined")) {
-    //     setLoading(false);
-    //     toast.error("Please enter a correct address");
-    //     return;
-    //   } else {
-    //     setFormData(prevFormData => ({
-    //       ...prevFormData,
-    //       address: googleAddress,
-    //       geolocation: {
-    //         lat: googleGeolocation.lat,
-    //         lng: googleGeolocation.lng,
-    //       },
-    //     }));
-    //   }
-    // }
-
-    const uploadImage = async (image: File, path: string) => {
-      const storage = getStorage();
-      const fileName = `${user?.uid}-${image.name}-${crypto.randomUUID()}`;
-      const storageRef = ref(storage, path + fileName);
-
-      const response = await uploadBytes(storageRef, image);
-      const url = await getDownloadURL(response.ref);
-      return url;
-    };
-
+    // Images
     let uploadedFeaturedImage;
-    if (featuredImage) {
+    if (featuredImage && user) {
       uploadedFeaturedImage = await uploadImage(
+        user.uid,
         featuredImage,
         "images/featuredImage/"
       );
     }
 
     const uploadImages = async (files: File[]) => {
+      if (!user) return;
       const imagePromises = Array.from(files, image =>
-        uploadImage(image, "images/")
+        uploadImage(user?.uid, image, "images/")
       );
 
       const urls = await Promise.all(imagePromises);
@@ -160,6 +131,11 @@ const CreateListing = () => {
 
     const formDataCopy: Partial<typeof formData> = {
       ...formData,
+      geolocation: {
+        lat: geolocationData?.latitude || undefined,
+        lng: geolocationData?.longitude || undefined,
+      },
+      location: geolocationData?.label || undefined,
       featuredImageUrl: uploadedFeaturedImage,
       imgUrls: uploadedImagesUrls,
       createdAt: serverTimestamp(),
@@ -171,7 +147,7 @@ const CreateListing = () => {
 
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
 
-    setLoading(false);
+    setLoadingData(false);
     toast.success("Listing saved");
     router.push(`/category/${formDataCopy.type}/${docRef.id}`);
   };
@@ -193,155 +169,140 @@ const CreateListing = () => {
     }));
   };
 
-  if (loading) {
+  if (loadingData) {
     return <Loader />;
   }
 
   return (
-    <div className="mt-32">
+    <>
       <header>
-        <h1 className="text-3xl font-bold mb-8">Create a Listing</h1>
+        <h1 className="text-2xl font-bold mb-12 text-center">
+          Create a Listing
+        </h1>
       </header>
 
       <main>
         <form
           onSubmit={onSubmit}
-          className="max-w-sm w-full flex flex-col gap-4"
+          className="max-w-2xl w-full mx-auto flex flex-col gap-4"
         >
           <div className="flex gap-4">
-            <button
+            <Button
               type="button"
-              className={`w-full py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                type === "sale" && "bg-green-500 text-slate-50"
-              }
-              `}
               id="type"
               value="sale"
               onClick={onMutate}
+              buttonStyle={`${
+                type === "sale" ? "bg-green-500 text-slate-50" : "bg-white"
+              }`}
             >
               Sell
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className={`w-full py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                type === "rent" && "bg-green-500 text-slate-50"
-              }
-              `}
               id="type"
               value="rent"
               onClick={onMutate}
+              buttonStyle={`${
+                type === "rent" ? "bg-green-500 text-slate-50" : "bg-white"
+              }`}
             >
               Rent
-            </button>
+            </Button>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="name" className="text-xl font-semibold">
-              Name
-            </label>
-            <input
-              className="rounded-lg shadow-md border-gray-200"
-              type="text"
-              id="name"
-              value={name}
+          {/* Name */}
+          <InputField
+            inputId="name"
+            label="Name"
+            type="text"
+            value={name}
+            onChange={onMutate}
+            maxLength={32}
+            minLength={10}
+          />
+
+          <div className="grid grid-cols-2">
+            <InputField
+              inputId="bedrooms"
+              label="Bedrooms"
+              type="number"
+              value={+bedrooms}
               onChange={onMutate}
-              maxLength={32}
-              minLength={10}
-              required
+              max={50}
+              min={1}
+              inputStyle="w-[100px]"
             />
-          </div>
-
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="bedrooms" className="text-xl font-semibold">
-                Bedrooms
-              </label>
-              <input
-                className="w-[100px] rounded-lg shadow-md border-gray-200"
-                type="number"
-                id="bedrooms"
-                value={bedrooms}
-                onChange={onMutate}
-                min="1"
-                max="50"
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="bathrooms" className="text-xl font-semibold">
-                Bathrooms
-              </label>
-              <input
-                className="w-[100px] rounded-lg shadow-md border-gray-200"
-                type="number"
-                id="bathrooms"
-                value={bathrooms}
-                onChange={onMutate}
-                min="1"
-                max="50"
-                required
-              />
-            </div>
+            <InputField
+              inputId="bathrooms"
+              label="Bathrooms"
+              type="number"
+              value={+bathrooms}
+              onChange={onMutate}
+              max={50}
+              min={1}
+              inputStyle="w-[100px]"
+            />
           </div>
 
           <label htmlFor="parking" className="text-xl font-semibold">
             Parking spot
           </label>
           <div className="flex gap-4">
-            <button
-              className={`w-[100px] py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                parking && "bg-green-500 text-slate-50"
-              }
-              `}
+            <Button
               type="button"
               id="parking"
               value="true"
               onClick={onMutate}
+              buttonStyle={`${
+                parking ? "bg-green-500 text-slate-50" : "bg-white"
+              }`}
             >
               Yes
-            </button>
-            <button
-              className={`w-[100px] py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                !parking && parking !== null && "bg-green-500 text-slate-50"
-              }
-            `}
+            </Button>
+            <Button
               type="button"
               id="parking"
               value="false"
               onClick={onMutate}
+              buttonStyle={`${
+                !parking && parking !== null
+                  ? "bg-green-500 text-slate-50"
+                  : "bg-white"
+              }`}
             >
               No
-            </button>
+            </Button>
           </div>
 
           <label htmlFor="furnished" className="text-xl font-semibold">
             Furnished
           </label>
           <div className="flex gap-4">
-            <button
-              className={`w-[100px] py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                furnished && "bg-green-500 text-slate-50"
-              }
-              `}
+            <Button
               type="button"
               id="furnished"
               value="true"
               onClick={onMutate}
+              buttonStyle={`${
+                furnished ? "bg-green-500 text-slate-50" : "bg-white"
+              }`}
             >
               Yes
-            </button>
-            <button
-              className={`w-[100px] py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                !furnished && furnished !== null && "bg-green-500 text-slate-50"
-              }
-            `}
+            </Button>
+            <Button
               type="button"
               id="furnished"
               value="false"
               onClick={onMutate}
+              buttonStyle={`${
+                !furnished && furnished !== null
+                  ? "bg-green-500 text-slate-50"
+                  : "bg-white"
+              }`}
             >
               No
-            </button>
+            </Button>
           </div>
 
           <label className="text-xl font-semibold">Address</label>
@@ -350,6 +311,7 @@ const CreateListing = () => {
             id="address"
             value={address}
             onChange={onMutate}
+            rows={3}
             required
           />
 
@@ -361,7 +323,7 @@ const CreateListing = () => {
                   className="formInputSmall"
                   type="number"
                   id="latitude"
-                  value={geolocation.lat}
+                  value={+geolocation.lat}
                   onChange={onMutate}
                   required
                 />
@@ -372,7 +334,7 @@ const CreateListing = () => {
                   className="formInputSmall"
                   type="number"
                   id="longitude"
-                  value={geolocation.lng}
+                  value={+geolocation.lng}
                   onChange={onMutate}
                   required
                 />
@@ -382,73 +344,68 @@ const CreateListing = () => {
 
           <label className="text-xl font-semibold">Offer</label>
           <div className="flex gap-4">
-            <button
-              className={`w-[100px] py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                offer && "bg-green-500 text-slate-50"
-              }
-            `}
+            <Button
               type="button"
               id="offer"
               value="true"
               onClick={onMutate}
+              buttonStyle={`${
+                offer ? "bg-green-500 text-slate-50" : "bg-white"
+              }`}
             >
               Yes
-            </button>
-            <button
-              className={`w-[100px] py-3 px-5 rounded-xl shadow-lg font-semibold bg-white transition duration-200 hover:-translate-y-1 ${
-                !offer && offer !== null && "bg-green-500 text-slate-50"
-              }
-          `}
+            </Button>
+            <Button
               type="button"
               id="offer"
               value="false"
               onClick={onMutate}
+              buttonStyle={`${
+                !offer && offer !== null
+                  ? "bg-green-500 text-slate-50"
+                  : "bg-white"
+              }`}
             >
               No
-            </button>
+            </Button>
           </div>
 
-          <label className="text-xl font-semibold">Regular Price</label>
-          <div className="formPriceDiv">
-            <input
-              className="rounded-lg shadow-md border-gray-200"
-              type="number"
-              id="regularPrice"
-              value={regularPrice}
-              onChange={onMutate}
-              min="50"
-              max="750000000"
-              required
-            />
-            {type === "rent" && <p className="formPriceText">$ / Month</p>}
-          </div>
+          <InputField
+            inputId="regularPrice"
+            label="Regular Price"
+            type="number"
+            value={+regularPrice}
+            onChange={onMutate}
+            max={750000000}
+            min={50}
+            step={1000}
+            isPricePerMonth={type === "rent"}
+          />
 
           {offer && (
-            <>
-              <label className="text-xl font-semibold">Discounted Price</label>
-              <input
-                className="rounded-lg shadow-md border-gray-200"
-                type="number"
-                id="discountedPrice"
-                value={discountedPrice}
-                onChange={onMutate}
-                min="50"
-                max="750000000"
-                required={offer}
-              />
-            </>
+            <InputField
+              inputId="discountedPrice"
+              label="Discounted Price"
+              type="number"
+              value={+discountedPrice}
+              onChange={onMutate}
+              max={750000000}
+              min={50}
+              step={1000}
+              isPricePerMonth={type === "rent"}
+            />
           )}
 
           <UploadFeaturedImage setFormData={setFormData} />
 
           <UploadImages setFormData={setFormData} />
 
-          <button type="submit" className="py-3 px-5 rounded-lg shadow-lg mt-4">
+          <Button type="submit" buttonStyle={"bg-green-500 text-slate-50"}>
             Create Listing
-          </button>
+          </Button>
         </form>
       </main>
-    </div>
+    </>
   );
 };
 

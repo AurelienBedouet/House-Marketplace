@@ -1,14 +1,12 @@
-import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth, db } from "@/utils/firebase.config";
+import { auth, db } from "@/lib/firebase/firebase.config";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import Button from "@/components/layout/Button";
 
-type Props = {};
-
-const GoogleAuth = (props: Props) => {
+const GoogleAuth = () => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -32,22 +30,20 @@ const GoogleAuth = (props: Props) => {
       }
 
       toast.success("Successfully logged in!");
-      router.push("/");
+      router.push("/profile");
     } catch (error) {
       toast.error("Could not authorize with Google");
     }
   };
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={onGoogleClick}
-        className="w-full mb-4 py-3 px-5 rounded-lg shadow-lg flex items-center justify-center gap-4"
-      >
-        Sign {pathname === "/signup" ? "up" : "in"} with <FcGoogle />
-      </button>
-    </div>
+    <Button
+      type="button"
+      onClick={onGoogleClick}
+      buttonStyle="flex items-center justify-center gap-4 my-4 bg-blue-200 text-gray-700"
+    >
+      Sign {pathname === "/signup" ? "up" : "in"} with Google <FcGoogle />
+    </Button>
   );
 };
 

@@ -1,12 +1,15 @@
 import Categories from "@/components/pages/home/Categories";
-import LatestListings from "@/components/pages/home/LatestListings";
+import LatestOffers from "@/components/pages/home/LatestOffers";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main className="mt-32">
-      <LatestListings />
+    <div className="px-4 max-w-7xl mx-auto">
+      {/* <header></header> */}
+      <main>
+        <LatestOffers />
 
-      <Categories />
-    </main>
+        <Categories />
+      </main>
+    </div>
   );
 }

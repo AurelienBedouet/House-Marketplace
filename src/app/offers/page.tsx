@@ -10,52 +10,27 @@ import {
   startAfter,
   where,
 } from "firebase/firestore";
-import { db } from "@/utils/firebase.config";
+import { db } from "@/lib/firebase/firebase.config";
 import { toast } from "react-toastify";
 import Loader from "@/components/shared/Loader";
-import ListingItem from "@/components/ListingItem";
+import ListingItem from "@/components/shared/ListingItem";
 import { IListingData } from "@/types";
-
-interface IListingObject {
-  id: string;
-  data: IListingData;
-}
+import { lastFiveOffersQuery } from "@/lib/firebase/firestore.queries";
+import { getListings } from "@/lib/firebase/firestore.fetch";
+import Button from "@/components/layout/Button";
 
 const Offers = () => {
-  const [listings, setListings] = useState<IListingObject[]>([]);
+  const [listings, setListings] = useState<IListingData[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setLastFetchedListing] = useState({});
 
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        // Get reference
-        const listingsRef = collection(db, "listings");
+        const { data, lastVisible } = await getListings(lastFiveOffersQuery);
 
-        // Create a query
-        const q = query(
-          listingsRef,
-          where("offer", "==", true),
-          orderBy("createdAt", "desc"),
-          limit(10)
-        );
-
-        // Execute query
-        const querySnap = await getDocs(q);
-
-        const lastVisible = querySnap.docs[querySnap.docs.length - 1];
         setLastFetchedListing(lastVisible);
-
-        const listings: IListingObject[] = [];
-
-        querySnap.forEach(doc => {
-          return listings.push({
-            id: doc.id,
-            data: doc.data() as IListingData,
-          });
-        });
-
-        setListings(listings);
+        setListings(data);
         setLoading(false);
       } catch (error) {
         toast.error("Could not fetch listings");
@@ -86,13 +61,10 @@ const Offers = () => {
       const lastVisible = querySnap.docs[querySnap.docs.length - 1];
       setLastFetchedListing(lastVisible);
 
-      const listings: IListingObject[] = [];
+      const listings: IListingData[] = [];
 
       querySnap.forEach(doc => {
-        return listings.push({
-          id: doc.id,
-          data: doc.data() as IListingData,
-        });
+        listings.push({ ...(doc.data() as IListingData), id: doc.id });
       });
 
       setListings(prevState => [...prevState, ...listings]);
@@ -103,9 +75,9 @@ const Offers = () => {
   };
 
   return (
-    <div className="mt-32">
-      <header>
-        <h1 className="">Offers</h1>
+    <>
+      <header className="mb-8">
+        <h1>Offers</h1>
       </header>
 
       {loading ? (
@@ -113,9 +85,9 @@ const Offers = () => {
       ) : listings && listings.length > 0 ? (
         <>
           <main>
-            <ul className="">
-              {listings.map(({ data, id }) => (
-                <ListingItem listing={data} id={id} key={id} />
+            <ul className="flex flex-col gap-8">
+              {listings.map(data => (
+                <ListingItem listing={data} key={data.id} />
               ))}
             </ul>
           </main>
@@ -123,15 +95,19 @@ const Offers = () => {
           <br />
           <br />
           {lastFetchedListing && (
-            <button type="button" onClick={onFetchMoreListings} className="">
+            <Button
+              type="button"
+              onClick={onFetchMoreListings}
+              buttonStyle="max-w-max bg-white text-blue-500"
+            >
               Load More
-            </button>
+            </Button>
           )}
         </>
       ) : (
         <p>There are no current offers</p>
       )}
-    </div>
+    </>
   );
 };
 

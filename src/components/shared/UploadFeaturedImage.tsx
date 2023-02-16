@@ -15,9 +15,11 @@ const UploadFeaturedImage = ({ setFormData }: Props) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <label className="text-xl font-semibold">Featured Image</label>
+      <label htmlFor="featuredImage" className="text-xl font-semibold">
+        Featured Image
+      </label>
       <input
-        className=""
+        className="file:cursor-pointer file:rounded-lg file:shadow-md file:border-none file:bg-green-500 file:text-white file:font-semibold file:py-3 file:px-6 file:mr-4 file:transition file:duration-400 file:hover:bg-white file:hover:text-green-500"
         type="file"
         id="featuredImage"
         onChange={onUploadImage}

@@ -4,7 +4,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { IListingData } from "@/types";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "@/utils/firebase.config";
+import { auth, db } from "@/lib/firebase/firebase.config";
 import { toast } from "react-toastify";
 import {
   addDoc,
@@ -22,8 +22,8 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import Loader from "@/components/shared/Loader";
-import UploadImages from "../../../components/UploadImages";
-import UploadFeaturedImage from "../../../components/UploadFeaturedImage";
+import UploadImages from "../../../components/shared/UploadImages";
+import UploadFeaturedImage from "../../../components/shared/UploadFeaturedImage";
 
 const EditListing = ({ params }: { params: { id: string } }) => {
   const [geolocationEnabled, setGeolocationEnabled] = useState(true);
@@ -48,6 +48,7 @@ const EditListing = ({ params }: { params: { id: string } }) => {
     },
     userRef: "",
     imgUrls: [],
+    id: "",
   });
 
   const {
@@ -233,7 +234,7 @@ const EditListing = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className="mt-32">
+    <>
       <header>
         <h1 className="text-3xl font-bold mb-8">Edit Listing</h1>
       </header>
@@ -483,7 +484,7 @@ const EditListing = ({ params }: { params: { id: string } }) => {
           </button>
         </form>
       </main>
-    </div>
+    </>
   );
 };
 

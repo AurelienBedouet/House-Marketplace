@@ -1,7 +1,7 @@
 "use client";
 
 import { IUser } from "@/types";
-import { db } from "@/utils/firebase.config";
+import { db } from "@/lib/firebase/firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -30,7 +30,7 @@ const Contact = ({ params }: { params: { id: string } }) => {
   }, [params.id]);
 
   return (
-    <div className="pageContainer mt-32">
+    <>
       <header>
         <p className="pageHeader">Contact Landlord</p>
       </header>
@@ -67,7 +67,7 @@ const Contact = ({ params }: { params: { id: string } }) => {
           </form>
         </main>
       )}
-    </div>
+    </>
   );
 };
 

@@ -8,13 +8,13 @@ interface Props {
 const Slider = ({ urls }: Props) => {
   return (
     <div className="slide-container">
-      <Slide indicators={true} pauseOnHover={true}>
+      <Slide indicators={true} canSwipe={true} arrows={false}>
         {urls.map((url, index) => (
           <div
             key={index}
-            className="bg-cover h-[240px] sm:h-[300px] md:h-[360px] lg:h-[420px]"
+            className="bg-cover rounded-xl shadow-xl h-[320px] sm:h-[360px] md:h-[420px] lg:h-[480px]"
             style={{
-              background: `url(${url}) center no-repeat`,
+              background: `url(${url}) center center no-repeat`,
             }}
           />
         ))}

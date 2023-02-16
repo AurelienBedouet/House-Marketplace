@@ -1,9 +1,5 @@
-"use client";
-
 import Navbar from "@/components/global/Navbar";
 import "./globals.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/global/Footer";
 
 export default function RootLayout({
@@ -18,15 +14,11 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className="bg-slate-100 ">
-        <ToastContainer
-          limit={1}
-          position="top-center"
-          autoClose={1500}
-          pauseOnHover
-        />
+      <body className="bg-slate-100 text-gray-900">
         <Navbar />
-        <div className="mx-auto w-full px-4 max-w-7xl">{children}</div>
+        <div className="relative w-full min-h-[calc(100vh-120px)] py-32">
+          {children}
+        </div>
         <Footer />
       </body>
     </html>

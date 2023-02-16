@@ -1,14 +1,14 @@
 "use client";
 
-import { auth } from "@/utils/firebase.config";
+import Button from "@/components/layout/Button";
+import InputField from "@/components/layout/InputField";
+import { auth } from "@/lib/firebase/firebase.config";
 import { sendPasswordResetEmail } from "firebase/auth";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-type Props = {};
-
-const ForgotPassword = (props: Props) => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,32 +27,29 @@ const ForgotPassword = (props: Props) => {
   };
 
   return (
-    <div className="flex items-center h-[calc(100vh-60px)] mx-auto w-full px-4 max-w-md">
-      <div className="w-full">
-        <form
-          onSubmit={onSubmit}
-          className="w-full flex flex-col gap-4 max-w-md m-auto"
-        >
-          <h1 className="text-3xl text-center font-bold mb-6">
-            Forgot Password
-          </h1>
-          <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            value={email}
-            onChange={onChange}
-            className="rounded-lg shadow-md border-gray-200"
-          />
-          <button type="submit" className="mb-4 py-3 px-5 rounded-lg shadow-lg">
-            Send Reset Link
-          </button>
-          <Link href="/signin" className="underline">
-            Sign in
-          </Link>
-        </form>
-      </div>
-    </div>
+    <>
+      <form
+        onSubmit={onSubmit}
+        className="w-full flex flex-col gap-4 max-w-md m-auto"
+      >
+        <h1 className="text-3xl text-center font-bold mb-6">Forgot Password</h1>
+        <InputField
+          inputId="email"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={onChange}
+        />
+
+        <Button type="submit" buttonStyle="bg-gray-500 text-slate-50">
+          Send Reset Link
+        </Button>
+
+        <Link href="/signin" className="underline">
+          Sign in
+        </Link>
+      </form>
+    </>
   );
 };
 

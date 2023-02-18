@@ -1,5 +1,6 @@
-import { IListingData } from "@/types";
-import { getDocs, Query } from "firebase/firestore";
+import { IListingData, IMessage } from "@/types";
+import { collection, getDocs, Query } from "firebase/firestore";
+import { db } from "./firebase.config";
 
 export const getListings = async (query: Query) => {
   const querySnap = await getDocs(query);
@@ -13,4 +14,15 @@ export const getListings = async (query: Query) => {
   });
 
   return { data, lastVisible };
+};
+
+export const getMessages = async (userId: string) => {
+  const messagesCollection = collection(db, "users", userId, "messages");
+  const snapshot = await getDocs(messagesCollection);
+  const messages = snapshot.docs.map(doc => ({
+    ...(doc.data() as IMessage),
+    id: doc.id,
+  }));
+
+  return messages;
 };

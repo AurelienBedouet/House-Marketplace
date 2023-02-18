@@ -4,7 +4,7 @@ import { BsFillShareFill } from "react-icons/bs";
 import Slider from "./Slider";
 
 type Props = {
-  name: string;
+  title: string;
   featuredImageUrl: string;
   imgUrls: string[];
   shareLinkCopied: boolean;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ListingImages = ({
-  name,
+  title,
   featuredImageUrl,
   imgUrls,
   shareLinkCopied,
@@ -27,7 +27,7 @@ const ListingImages = ({
       ) : (
         <Image
           src={featuredImageUrl}
-          alt={name}
+          alt={title}
           width={1280}
           height={720}
           className="w-full bg-cover rounded-xl shadow-xl h-[240px] sm:h-[300px] md:h-[360px] lg:h-[420px]"

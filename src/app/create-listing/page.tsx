@@ -17,11 +17,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import { fetchGeolocationData } from "@/lib/fetchData/fetchGeolocationData";
 
 const CreateListing = () => {
-  const [geolocationEnabled, setGeolocationEnabled] = useState(true);
   const [loadingData, setLoadingData] = useState(false);
   const [formData, setFormData] = useState<IListingData>({
     type: "rent",
-    name: "",
+    title: "",
+    description: "",
     bedrooms: 1,
     bathrooms: 1,
     featuredImage: {} as File,
@@ -45,7 +45,8 @@ const CreateListing = () => {
 
   const {
     type,
-    name,
+    title,
+    description,
     bedrooms,
     bathrooms,
     parking,
@@ -98,10 +99,7 @@ const CreateListing = () => {
     }
 
     // Get Geolocation Data
-    let geolocationData;
-    if (geolocationEnabled) {
-      geolocationData = await fetchGeolocationData(address);
-    }
+    const geolocationData = await fetchGeolocationData(address);
 
     // Images
     let uploadedFeaturedImage;
@@ -132,10 +130,10 @@ const CreateListing = () => {
     const formDataCopy: Partial<typeof formData> = {
       ...formData,
       geolocation: {
-        lat: geolocationData?.latitude || undefined,
-        lng: geolocationData?.longitude || undefined,
+        lat: geolocationData?.latitude || 0,
+        lng: geolocationData?.longitude || 0,
       },
-      location: geolocationData?.label || undefined,
+      location: geolocationData?.label || "",
       featuredImageUrl: uploadedFeaturedImage,
       imgUrls: uploadedImagesUrls,
       createdAt: serverTimestamp(),
@@ -211,15 +209,26 @@ const CreateListing = () => {
             </Button>
           </div>
 
-          {/* Name */}
+          {/* Title */}
           <InputField
-            inputId="name"
-            label="Name"
+            inputId="title"
+            label="Title"
             type="text"
-            value={name}
+            value={title}
             onChange={onMutate}
             maxLength={32}
             minLength={10}
+          />
+
+          {/* Description */}
+          <label className="text-xl font-semibold">Description</label>
+          <textarea
+            className="rounded-lg shadow-md border-gray-200"
+            id="description"
+            value={description}
+            onChange={onMutate}
+            rows={3}
+            required
           />
 
           <div className="grid grid-cols-2">
@@ -229,8 +238,8 @@ const CreateListing = () => {
               type="number"
               value={+bedrooms}
               onChange={onMutate}
-              max={50}
               min={1}
+              max={1000}
               inputStyle="w-[100px]"
             />
             <InputField
@@ -239,8 +248,8 @@ const CreateListing = () => {
               type="number"
               value={+bathrooms}
               onChange={onMutate}
-              max={50}
               min={1}
+              max={1000}
               inputStyle="w-[100px]"
             />
           </div>
@@ -315,33 +324,6 @@ const CreateListing = () => {
             required
           />
 
-          {!geolocationEnabled && (
-            <div className="formLatLng flex">
-              <div>
-                <label className="text-xl font-semibold">Latitude</label>
-                <input
-                  className="formInputSmall"
-                  type="number"
-                  id="latitude"
-                  value={+geolocation.lat}
-                  onChange={onMutate}
-                  required
-                />
-              </div>
-              <div>
-                <label className="text-xl font-semibold">Longitude</label>
-                <input
-                  className="formInputSmall"
-                  type="number"
-                  id="longitude"
-                  value={+geolocation.lng}
-                  onChange={onMutate}
-                  required
-                />
-              </div>
-            </div>
-          )}
-
           <label className="text-xl font-semibold">Offer</label>
           <div className="flex gap-4">
             <Button
@@ -376,9 +358,9 @@ const CreateListing = () => {
             type="number"
             value={+regularPrice}
             onChange={onMutate}
-            max={750000000}
+            max={7500000000}
             min={50}
-            step={1000}
+            step={type === "rent" ? 100 : 10000}
             isPricePerMonth={type === "rent"}
           />
 
@@ -389,9 +371,9 @@ const CreateListing = () => {
               type="number"
               value={+discountedPrice}
               onChange={onMutate}
-              max={750000000}
-              min={50}
-              step={1000}
+              max={7500000000}
+              min={49}
+              step={type === "rent" ? 100 : 10000}
               isPricePerMonth={type === "rent"}
             />
           )}

@@ -21,7 +21,7 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
-    createdAt: serverTimestamp() as MyTimestamp,
+    createdAt: {} as MyTimestamp,
   });
 
   const { name, email, password } = formData;

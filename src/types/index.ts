@@ -17,6 +17,14 @@ export interface IUser {
   createdAt: MyTimestamp;
 }
 
+export interface IMessage {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: Timestamp;
+  message: string;
+}
+
 export interface IListingData {
   bathrooms: number;
   bedrooms: number;
@@ -28,7 +36,8 @@ export interface IListingData {
   imgUrls: string[];
   address: string;
   location: string;
-  name: string;
+  title: string;
+  description: string;
   offer: boolean;
   furnished: boolean;
   parking: boolean;

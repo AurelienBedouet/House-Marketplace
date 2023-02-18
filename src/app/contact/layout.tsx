@@ -16,7 +16,7 @@ export default function AuthenticationLayout({
         autoClose={1500}
         pauseOnHover
       />
-      <div className="px-4 max-w-7xl mx-auto">{children}</div>
+      <div className="px-4 max-w-2xl mx-auto">{children}</div>
     </>
   );
 }

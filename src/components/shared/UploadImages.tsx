@@ -104,7 +104,9 @@ const UploadImages = ({ setFormData }: Props) => {
       <aside>
         {files.length > 0 && (
           <>
-            <h4>Accepted files</h4>
+            <h4 className="text-lg font-semibold text-green-500">
+              Accepted files
+            </h4>
             <ul>{files}</ul>
           </>
         )}

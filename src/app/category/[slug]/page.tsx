@@ -116,7 +116,7 @@ const Category = ({ params }: { params: { slug: string } }) => {
 
           <br />
           <br />
-          {lastFetchedListing && (
+          {lastFetchedListing && listings.length >= 10 && (
             <Button
               type="button"
               onClick={onFetchMoreListings}

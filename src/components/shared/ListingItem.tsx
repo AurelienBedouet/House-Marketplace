@@ -14,7 +14,7 @@ const ListingItem = ({ listing, onEdit, onDelete }: Props) => {
   const {
     type,
     featuredImageUrl,
-    name,
+    title,
     address,
     offer,
     discountedPrice,
@@ -33,7 +33,7 @@ const ListingItem = ({ listing, onEdit, onDelete }: Props) => {
         {/* Featured Image */}
         <Image
           src={featuredImageUrl}
-          alt={name}
+          alt={title}
           width={480}
           height={270}
           className="rounded-t-xl md:rounded-l-xl md:rounded-r-none aspect-[16/9] w-full h-[270px] md:h-full group-hover:opacity-50"
@@ -46,7 +46,7 @@ const ListingItem = ({ listing, onEdit, onDelete }: Props) => {
       <div className="col-span-12 md:col-span-7 w-full min-h-[240px] p-3 sm:p-5 flex justify-between">
         {/* Listing Infos */}
         <div className="flex flex-col gap-4">
-          <h3>{name}</h3>
+          <h3>{title}</h3>
 
           <div className="flex flex-col gap-4">
             <p className="text-lg font-semibold text-blue-500">
@@ -109,7 +109,7 @@ const ListingItem = ({ listing, onEdit, onDelete }: Props) => {
               <MdDelete
                 size={24}
                 color="rgb(37 99 235)"
-                onClick={() => onDelete(id, name)}
+                onClick={() => onDelete(id, title)}
                 className="text-xl cursor-pointer transition duration-300 hover:scale-110"
               />
             )}

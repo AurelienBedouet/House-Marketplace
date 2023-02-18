@@ -9,7 +9,7 @@ const Navbar = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <nav className="bg-white shadow-lg fixed top-0 left-0 w-full z-10 h-[60px] flex items-center">
+    <nav className="bg-white shadow-lg fixed top-0 left-0 w-full z-[9999] h-[60px] flex items-center">
       <div className="mx-auto w-full px-4 max-w-7xl flex items-center justify-between">
         <Link href="/" className="text-lg font-bold text-blue-500">
           Property Portal

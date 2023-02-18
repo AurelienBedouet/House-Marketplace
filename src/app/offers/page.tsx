@@ -105,7 +105,7 @@ const Offers = () => {
           )}
         </>
       ) : (
-        <p>There are no current offers</p>
+        <p className="text-xl">There are no current offers.</p>
       )}
     </>
   );

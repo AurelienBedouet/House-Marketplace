@@ -53,7 +53,7 @@ const UserListings = () => {
   }, [user]);
 
   const onDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete?")) {
+    if (window.confirm("Are you sure you want to delete this listing ?")) {
       await deleteDoc(doc(db, "listings", id));
       const updatedListings = listings.filter(listing => listing.id !== id);
       setListings(updatedListings);

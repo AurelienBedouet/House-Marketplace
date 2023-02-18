@@ -19,7 +19,7 @@ const Listing = ({ params }: { params: { id: string } }) => {
   const [user] = useAuthState(auth);
 
   const {
-    name,
+    title,
     address,
     location,
     featuredImageUrl,
@@ -50,7 +50,7 @@ const Listing = ({ params }: { params: { id: string } }) => {
     <main className="flex flex-col gap-12">
       {/* Featured Image or Slider */}
       <ListingImages
-        name={name}
+        title={title}
         featuredImageUrl={featuredImageUrl}
         imgUrls={imgUrls}
         shareLinkCopied={shareLinkCopied}
@@ -59,20 +59,20 @@ const Listing = ({ params }: { params: { id: string } }) => {
 
       <ListingInfo listing={listing} />
 
-      {geolocation.lat && geolocation.lng && (
+      {geolocation.lat && geolocation.lng ? (
         <ListingMap
           address={address}
           location={location}
           lat={geolocation.lat}
           lng={geolocation.lng}
         />
-      )}
+      ) : null}
 
       {/* Contact Landlord Link */}
       {user?.uid !== userRef && (
         <Link
-          href={`/contact/${userRef}?listingName=${name}`}
-          className="text-center w-full py-3 px-5 rounded-xl shadow-lg font-semibold bg-green-500 text-slate-50 transition duration-200 hover:-translate-y-1"
+          href={`/contact/${userRef}?listingName=${title}`}
+          className="text-center w-full py-3 px-5 rounded-xl shadow-lg font-semibold bg-blue-500 text-slate-50 transition duration-200 hover:-translate-y-1"
         >
           Contact Landlord
         </Link>

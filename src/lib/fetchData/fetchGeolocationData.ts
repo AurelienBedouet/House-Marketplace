@@ -5,9 +5,8 @@ export const fetchGeolocationData = async (address: string) => {
     const response = await fetch(
       `${POSITIONSTACK_URL}?access_key=${process.env.NEXT_PUBLIC_REACT_APP_GEOCODE}&query=${address}&https=false`
     );
-    const data = await response.json();
 
-    console.log(data);
+    const data = await response.json();
 
     const label = data.data[0].label;
     const latitude = data.data[0].latitude;

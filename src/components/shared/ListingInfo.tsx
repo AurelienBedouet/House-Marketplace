@@ -10,11 +10,13 @@ type Props = {
 const ListingInfo = ({ listing }: Props) => {
   const {
     type,
-    name,
+    title,
+    description,
     offer,
     bedrooms,
     bathrooms,
     address,
+    location,
     discountedPrice,
     regularPrice,
     parking,
@@ -25,7 +27,7 @@ const ListingInfo = ({ listing }: Props) => {
     <div className="flex flex-col gap-8 bg-slate-50 text-gray-900 rounded-xl shadow-xl p-5">
       {/* Name & Categories */}
       <div className="flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-        <h3>{name}</h3>
+        <h3>{title}</h3>
 
         <div className="flex gap-2">
           <span className="max-w-max text-center border-none px-4 py-1 rounded-lg text-slate-50 bg-blue-500 font-semibold">
@@ -65,9 +67,13 @@ const ListingInfo = ({ listing }: Props) => {
 
         {/* Address */}
         <p className="flex items-center gap-2 text-gray-900 font-semibold">
-          <MdLocationOn size="24" color="rgb(37 99 235)" /> {address}
+          <MdLocationOn size="24" color="rgb(37 99 235)" />{" "}
+          {location ?? address}
         </p>
       </div>
+
+      {/* Description */}
+      <p>{description}</p>
 
       <div className="flex flex-col gap-4">
         {/* Details */}

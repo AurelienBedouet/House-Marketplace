@@ -57,7 +57,7 @@ const LatestOffers = () => {
               <div key={id} className="relative">
                 <Link href={`/category/${type}/${id}`}>
                   <div
-                    className="w-full rounded-xl shadow-xl aspect-[16/9] min-h-[240px] max-h-[360px] transition ease-in duration-400 hover:opacity-80"
+                    className="w-full rounded-xl shadow-xl aspect-[16/9] min-h-[240px] max-h-[480px] transition ease-in duration-400 hover:opacity-80"
                     style={{
                       background: `url(${featuredImageUrl}) center no-repeat`,
                       backgroundSize: "cover",

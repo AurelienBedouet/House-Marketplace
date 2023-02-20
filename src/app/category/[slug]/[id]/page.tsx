@@ -10,7 +10,6 @@ import Link from "next/link";
 import ListingInfo from "../../../../components/shared/ListingInfo";
 import ListingMap from "@/components/shared/ListingMap";
 import ListingImages from "@/components/shared/ListingImages";
-import Image from "next/image";
 
 const Listing = ({ params }: { params: { id: string } }) => {
   const [listing, setListing] = useState<IListingData>({} as IListingData);

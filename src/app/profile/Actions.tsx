@@ -11,6 +11,8 @@ import Button from "@/components/layout/Button";
 import ClientMessage from "@/components/shared/ClientMessage";
 import { toast } from "react-toastify";
 import { deleteDoc, doc } from "firebase/firestore";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 type Props = {};
 
@@ -35,16 +37,30 @@ const Actions = (props: Props) => {
     getUserMessages();
   }, [user]);
 
-  const onDelete = async (id: string) => {
-    if (
-      user &&
-      window.confirm("Are you sure you want to delete this message?")
-    ) {
+  const deleteMessage = async (id: string) => {
+    if (user) {
       await deleteDoc(doc(db, "users", user?.uid, "messages", id));
       const updatedMessages = messages.filter(message => message.id !== id);
       setMessages(updatedMessages);
       toast.success("Message successfully deleted");
     }
+  };
+
+  const confirmDeleteMessage = (id: string) => {
+    confirmAlert({
+      title: "Confirm to delete",
+      message: "Are you sure to do this?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => deleteMessage(id),
+        },
+        {
+          label: "No",
+          // onClick: () => alert('Click No')
+        },
+      ],
+    });
   };
 
   return (
@@ -72,14 +88,14 @@ const Actions = (props: Props) => {
       </div>
 
       {/* Messages */}
-      {showMessages && (
+      {showMessages && messages.length > 0 && (
         <div className="flex flex-col gap-4">
           <h2>My Messages</h2>
           {messages.map(msg => (
             <ClientMessage
               key={msg.id}
               msg={msg}
-              onDelete={() => onDelete(msg.id)}
+              onDelete={() => confirmDeleteMessage(msg.id)}
             />
           ))}
         </div>

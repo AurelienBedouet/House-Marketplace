@@ -7,7 +7,7 @@ import { MdBathtub, MdDelete, MdLocationOn } from "react-icons/md";
 type Props = {
   listing: IListingData;
   onEdit?: (id: string) => void;
-  onDelete?: (id: string, name: string) => void;
+  onDelete?: (id: string) => void;
 };
 
 const ListingItem = ({ listing, onEdit, onDelete }: Props) => {
@@ -109,7 +109,7 @@ const ListingItem = ({ listing, onEdit, onDelete }: Props) => {
               <MdDelete
                 size={24}
                 color="rgb(37 99 235)"
-                onClick={() => onDelete(id, title)}
+                onClick={() => onDelete(id)}
                 className="text-xl cursor-pointer transition duration-300 hover:scale-110"
               />
             )}

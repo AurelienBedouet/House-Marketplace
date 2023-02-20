@@ -15,6 +15,8 @@ import {
 } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
 
@@ -52,13 +54,28 @@ const UserListings = () => {
     fetchUserListings();
   }, [user]);
 
-  const onDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this listing ?")) {
-      await deleteDoc(doc(db, "listings", id));
-      const updatedListings = listings.filter(listing => listing.id !== id);
-      setListings(updatedListings);
-      toast.success("Successfully deleted listing");
-    }
+  const deleteListing = async (id: string) => {
+    await deleteDoc(doc(db, "listings", id));
+    const updatedListings = listings.filter(listing => listing.id !== id);
+    setListings(updatedListings);
+    toast.success("Successfully deleted listing");
+  };
+
+  const confirmDeleteMListing = (id: string) => {
+    confirmAlert({
+      title: "Confirm to delete",
+      message: "Are you sure to do this?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => deleteListing(id),
+        },
+        {
+          label: "No",
+          // onClick: () => alert('Click No')
+        },
+      ],
+    });
   };
 
   const onEdit = (id: string) => router.push(`/edit-listing/${id}`);
@@ -85,7 +102,7 @@ const UserListings = () => {
               <ListingItem
                 key={data.id}
                 listing={data}
-                onDelete={() => onDelete(data.id)}
+                onDelete={() => confirmDeleteMListing(data.id)}
                 onEdit={() => onEdit(data.id)}
               />
             ))}

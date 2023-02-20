@@ -12,9 +12,10 @@ const Slider = ({ urls }: Props) => {
         {urls.map((url, index) => (
           <div
             key={index}
-            className="bg-cover rounded-xl shadow-xl h-[320px] sm:h-[360px] md:h-[420px] lg:h-[480px]"
+            className="w-full rounded-xl shadow-xl aspect-[16/9] min-h-[240px] max-h-[480px]"
             style={{
-              background: `url(${url}) center center no-repeat`,
+              background: `url(${url}) center no-repeat`,
+              backgroundSize: "cover",
             }}
           />
         ))}

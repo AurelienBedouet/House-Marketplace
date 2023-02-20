@@ -30,7 +30,7 @@ const ListingImages = ({
           alt={title}
           width={1280}
           height={720}
-          className="w-full bg-cover rounded-xl shadow-xl h-[240px] sm:h-[300px] md:h-[360px] lg:h-[420px]"
+          className="w-full rounded-xl shadow-xl aspect-[16/9] min-h-[240px] max-h-[480px]"
         />
       )}
 

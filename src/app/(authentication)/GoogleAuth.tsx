@@ -40,7 +40,7 @@ const GoogleAuth = () => {
     <Button
       type="button"
       onClick={onGoogleClick}
-      buttonStyle="flex items-center justify-center gap-4 my-4 bg-blue-200 text-gray-700"
+      buttonStyle="flex items-center justify-center gap-4 my-4 bg-slate-50 text-slate-800"
     >
       Sign {pathname === "/signup" ? "up" : "in"} with Google <FcGoogle />
     </Button>

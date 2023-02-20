@@ -23,18 +23,20 @@ const ListingInfo = ({ listing }: Props) => {
     furnished,
   } = listing;
 
+  const discount = regularPrice - discountedPrice;
+
   return (
     <div className="flex flex-col gap-8 bg-slate-50 text-gray-900 rounded-xl shadow-xl p-5">
       {/* Name & Categories */}
       <div className="flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-        <h3>{title}</h3>
+        <h1>{title}</h1>
 
         <div className="flex gap-2">
-          <span className="max-w-max text-center border-none px-4 py-1 rounded-lg text-slate-50 bg-blue-500 font-semibold">
+          <span className="min-w-[96px] text-center border-none px-4 py-1 rounded-lg text-yellow-500 bg-slate-800 shadow-lg font-semibold">
             For {type.toUpperCase()}
           </span>
           {offer && (
-            <span className="max-w-max text-center border-none px-4 py-1 rounded-lg text-slate-50 bg-green-500 font-semibold">
+            <span className="text-center border-none px-4 py-1 rounded-lg text-slate-800 bg-yellow-500 shadow-lg font-semibold">
               Offer
             </span>
           )}
@@ -60,15 +62,19 @@ const ListingInfo = ({ listing }: Props) => {
 
           {offer && (
             <span className="max-w-max text-center border-none px-4 py-1 rounded-lg text-slate-50 bg-blue-500 font-semibold">
-              ${regularPrice - discountedPrice} discount!
+              $
+              {discount
+                .toString()
+                .replace(/^0+/, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+              discount!
             </span>
           )}
         </div>
 
         {/* Address */}
         <p className="flex items-center gap-2 text-gray-900 font-semibold">
-          <MdLocationOn size="24" color="rgb(37 99 235)" />{" "}
-          {location ?? address}
+          <MdLocationOn size="24" color="rgb(37 99 235)" /> {address}
         </p>
       </div>
 

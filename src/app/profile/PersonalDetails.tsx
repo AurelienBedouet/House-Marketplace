@@ -82,7 +82,7 @@ const PersonalDetails = () => {
               changeDetails && onSubmit();
               setChangeDetails(prevState => !prevState);
             }}
-            buttonStyle="max-w-max bg-blue-300 text-gray-900"
+            buttonStyle="max-w-max bg-blue-500 text-slate-50"
           >
             {changeDetails ? "Done" : "Change"}
           </Button>

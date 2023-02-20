@@ -10,6 +10,7 @@ import Link from "next/link";
 import ListingInfo from "../../../../components/shared/ListingInfo";
 import ListingMap from "@/components/shared/ListingMap";
 import ListingImages from "@/components/shared/ListingImages";
+import Image from "next/image";
 
 const Listing = ({ params }: { params: { id: string } }) => {
   const [listing, setListing] = useState<IListingData>({} as IListingData);
@@ -72,7 +73,7 @@ const Listing = ({ params }: { params: { id: string } }) => {
       {user?.uid !== userRef && (
         <Link
           href={`/contact/${userRef}?listingName=${title}`}
-          className="text-center w-full py-3 px-5 rounded-xl shadow-lg font-semibold bg-blue-500 text-slate-50 transition duration-200 hover:-translate-y-1"
+          className="text-center w-full py-3 px-5 rounded-xl shadow-lg font-semibold bg-slate-800 text-yellow-500 transition duration-200 hover:-translate-y-1"
         >
           Contact Landlord
         </Link>

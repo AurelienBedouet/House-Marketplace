@@ -16,7 +16,7 @@ const LogoutButton = () => {
     <Button
       type="button"
       onClick={logout}
-      buttonStyle="max-w-max bg-red-300 text-gray-900"
+      buttonStyle="max-w-max bg-red-500 text-slate-50"
     >
       Log out
     </Button>

@@ -94,7 +94,7 @@ const SignIn = () => {
           Forgot Password
         </Link>
 
-        <Button type="submit" buttonStyle="bg-gray-500 text-slate-50">
+        <Button type="submit" buttonStyle="bg-slate-800 text-yellow-500">
           Sign in
         </Button>
       </form>

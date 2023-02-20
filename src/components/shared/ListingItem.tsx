@@ -86,24 +86,24 @@ const ListingItem = ({ listing, onEdit, onDelete }: Props) => {
           }`}
         >
           <div className="flex flex-col gap-2">
-            <span className="text-center border-none px-4 py-1 rounded-lg text-slate-50 bg-blue-500 shadow-lg font-semibold">
+            <span className="min-w-[96px] text-center border-none px-4 py-1 rounded-lg text-yellow-500 bg-slate-800 shadow-lg font-semibold">
               For {type.toUpperCase()}
             </span>
             {offer && (
-              <span className="text-center border-none px-4 py-1 rounded-lg text-slate-50 bg-green-600 shadow-lg font-semibold">
+              <span className="text-center border-none px-4 py-1 rounded-lg text-slate-800 bg-yellow-500 shadow-lg font-semibold">
                 Offer
               </span>
             )}
           </div>
           <div className="flex flex-col gap-4">
-            {onEdit && (
+            {/* {onEdit && (
               <FaEdit
                 size={24}
                 color="rgb(37 99 235)"
                 onClick={() => onEdit(id)}
                 className="text-xl cursor-pointer transition duration-300 hover:scale-110"
               />
-            )}
+            )} */}
 
             {onDelete && (
               <MdDelete

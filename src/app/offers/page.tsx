@@ -52,7 +52,7 @@ const Offers = () => {
         where("offer", "==", true),
         orderBy("createdAt", "desc"),
         startAfter(lastFetchedListing),
-        limit(10)
+        limit(5)
       );
 
       // Execute query
@@ -98,7 +98,7 @@ const Offers = () => {
             <Button
               type="button"
               onClick={onFetchMoreListings}
-              buttonStyle="max-w-max bg-white text-blue-500"
+              buttonStyle="max-w-max bg-slate-800 text-yellow-500"
             >
               Load More
             </Button>

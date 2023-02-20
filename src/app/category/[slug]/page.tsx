@@ -35,7 +35,7 @@ const Category = ({ params }: { params: { slug: string } }) => {
           listingsRef,
           where("type", "==", searchParams),
           orderBy("createdAt", "desc"),
-          limit(10)
+          limit(5)
         );
 
         // Execute query
@@ -72,7 +72,7 @@ const Category = ({ params }: { params: { slug: string } }) => {
         where("type", "==", searchParams),
         orderBy("createdAt", "desc"),
         startAfter(lastFetchedListing),
-        limit(10)
+        limit(5)
       );
 
       // Execute query
@@ -116,11 +116,11 @@ const Category = ({ params }: { params: { slug: string } }) => {
 
           <br />
           <br />
-          {lastFetchedListing && listings.length >= 10 && (
+          {lastFetchedListing && (
             <Button
               type="button"
               onClick={onFetchMoreListings}
-              buttonStyle="max-w-max bg-white text-blue-600"
+              buttonStyle="max-w-max bg-slate-800 text-yellow-500"
             >
               Load More
             </Button>

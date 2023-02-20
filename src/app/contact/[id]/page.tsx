@@ -109,7 +109,10 @@ const Contact = ({ params }: { params: { id: string } }) => {
               required
             />
 
-            <Button type="submit" buttonStyle="mt-4 bg-blue-500 text-slate-50">
+            <Button
+              type="submit"
+              buttonStyle="mt-4 bg-slate-800 text-yellow-500"
+            >
               Send Message
             </Button>
           </form>

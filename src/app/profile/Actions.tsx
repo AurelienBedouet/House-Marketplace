@@ -52,7 +52,7 @@ const Actions = (props: Props) => {
       <div className="flex flex-col sm:flex-row gap-4 items justify-between">
         <Link
           href="/create-listing"
-          className="flex items-center gap-4 py-3 px-5 rounded-lg shadow-lg max-w-max bg-green-400 text-gray-900 font-semibold transition duration-200 hover:-translate-y-1"
+          className="flex items-center gap-4 py-3 px-5 rounded-lg shadow-lg max-w-max bg-slate-800 text-yellow-500 font-semibold transition duration-200 hover:-translate-y-1"
         >
           Sell or Rent your property <BsFillArrowRightCircleFill size={24} />
         </Link>
@@ -61,7 +61,7 @@ const Actions = (props: Props) => {
           <Button
             type="button"
             onClick={() => setShowMessages(!showMessages)}
-            buttonStyle="flex items-center gap-4 justify-between max-w-max bg-blue-500 text-slate-50"
+            buttonStyle="flex items-center gap-4 justify-between max-w-max bg-yellow-500 text-slate-800"
           >
             {showMessages ? "Hide Messages" : "See Messages"}{" "}
             <span className="bg-red-500 text-slate-50 w-6 h-6 rounded-md flex items-center justify-center">

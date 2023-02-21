@@ -63,13 +63,9 @@ const LatestOffers = () => {
                       backgroundSize: "cover",
                     }}
                   />
-                  <div className="absolute left-0 top-12 text-white bg-black/80 flex flex-col gap-2 px-4 py-2 rounded-r-lg">
-                    <p className="font-semibold text-xl lg:text-2xl">{title}</p>
-                    <p className="font-semibold text-xl lg:text-2xl">
-                      ${discountedPrice ?? regularPrice}{" "}
-                      {type === "rent" && "/ month"}
-                    </p>
-                  </div>
+                  <p className="absolute left-0 top-6 sm:top-12 text-white bg-black/80 flex flex-col gap-2 px-4 py-2 rounded-r-lg font-semibold text-xl lg:text-2xl">
+                    {title}
+                  </p>
                 </Link>
               </div>
             )

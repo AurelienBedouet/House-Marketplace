@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { BsFillShareFill } from "react-icons/bs";
 import Slider from "./Slider";
 
@@ -22,9 +21,15 @@ const ListingImages = ({
 }: Props) => {
   const allImages = [featuredImageUrl, ...imgUrls];
 
-  const pathname = usePathname();
-
-  const urlToCopy = `https://www.machin/${pathname}`;
+  const getURL = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setShareLinkCopied(true);
+      setTimeout(() => {
+        setShareLinkCopied(false);
+      }, 2000);
+    }
+  };
 
   return (
     <div className="relative">
@@ -42,13 +47,7 @@ const ListingImages = ({
 
       <span
         className="absolute top-5 right-5 bg-white p-3 sm:p-4 rounded-full shadow-xl cursor-pointer"
-        onClick={() => {
-          navigator.clipboard.writeText(urlToCopy);
-          setShareLinkCopied(true);
-          setTimeout(() => {
-            setShareLinkCopied(false);
-          }, 2000);
-        }}
+        onClick={getURL}
       >
         <BsFillShareFill />
       </span>

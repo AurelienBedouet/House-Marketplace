@@ -8,8 +8,13 @@ import { doc, getDoc } from "firebase/firestore";
 import Loader from "@/components/shared/Loader";
 import Link from "next/link";
 import ListingInfo from "../../../../components/shared/ListingInfo";
-import ListingMap from "@/components/shared/ListingMap";
 import ListingImages from "@/components/shared/ListingImages";
+import dynamic from "next/dynamic";
+
+const ListingMap = dynamic(() => import("@/components/shared/ListingMap"), {
+  ssr: false,
+});
+// import ListingMap from "@/components/shared/ListingMap";
 
 const Listing = ({ params }: { params: { id: string } }) => {
   const [listing, setListing] = useState<IListingData>({} as IListingData);
@@ -47,7 +52,7 @@ const Listing = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <main className="flex flex-col gap-12">
+    <main className="flex flex-col gap-16">
       {/* Featured Image or Slider */}
       <ListingImages
         title={title}
@@ -69,14 +74,14 @@ const Listing = ({ params }: { params: { id: string } }) => {
       ) : null}
 
       {/* Contact Landlord Link */}
-      {user?.uid !== userRef && (
+      {user?.uid !== userRef ? (
         <Link
           href={`/contact/${userRef}?listingName=${title}`}
           className="text-center w-full py-3 px-5 rounded-xl shadow-lg font-semibold bg-slate-800 text-yellow-500 transition duration-200 hover:-translate-y-1"
         >
           Contact Landlord
         </Link>
-      )}
+      ) : null}
     </main>
   );
 };
